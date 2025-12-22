@@ -2,7 +2,7 @@
 
 ;; Author: piratalpha
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "27.1") (rgbds-mode "0.1"))
+;; Package-Requires: ((emacs "27.1") (mwim "0.9"))
 ;; Keywords: tools, gameboy, rgbds
 ;; URL: https://github.com/piratalpha/gb-rgbds
 
@@ -16,9 +16,14 @@
 ;; - gb-rgbds-build-and-run
 ;;
 
-(require 'rgbds-mode)
+(add-to-list 'load-path
+             (expand-file-name "lisp"
+                               (file-name-directory load-file-name)))
+
+(require 'gb-rgbds-mode)
+
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.asm\\'" . rgbds-mode))
+(add-to-list 'auto-mode-alist '("\\.asm\\'" . gb-rgbds-mode))
 
 ;;; Code:
 
