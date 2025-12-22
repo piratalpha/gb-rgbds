@@ -2,7 +2,7 @@
 
 ;; Author: piratalpha
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "27.1"))
+;; Package-Requires: ((emacs "27.1") (rgbds-mode "0.1"))
 ;; Keywords: tools, gameboy, rgbds
 ;; URL: https://github.com/piratalpha/gb-rgbds
 
@@ -15,6 +15,10 @@
 ;; - gb-rgbds-run
 ;; - gb-rgbds-build-and-run
 ;;
+
+(require 'rgbds-mode)
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.asm\\'" . rgbds-mode))
 
 ;;; Code:
 
@@ -75,6 +79,13 @@
             (remove-hook 'compilation-finish-functions hook)))
     (add-hook 'compilation-finish-functions hook)
     (gb-rgbds-build)))
+
+(when (featurep 'doom)
+  (map! :leader
+        :prefix ("c" . "code")
+        :desc "GB build"        "b" #'gb-rgbds-build
+        :desc "GB run"          "r" #'gb-rgbds-run
+        :desc "GB build & run"  "R" #'gb-rgbds-build-and-run))
 
 (provide 'gb-rgbds)
 ;;; gb-rgbds.el ends here
