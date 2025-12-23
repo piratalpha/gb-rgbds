@@ -70,20 +70,25 @@
   "Run the built ROM in Emulicious."
   (interactive)
   (let* ((root (gb-rgbds--project-root))
-         (rom-path (expand-file-name gb-rgbds-output-rom-name root)))
+         (rom-path (expand-file-name gb-rgbds-output-rom-name root))
+         ;; Expand the jar path to handle the "~" symbol correctly
+         (jar-path (expand-file-name gb-rgbds-emulicious-jar)))
     
     ;; Sanity Checks
     (unless gb-rgbds-emulicious-jar
-      (user-error "Variable `gb-rgbds-emulicious-jar' is not set. Check your config."))
-    (unless (file-exists-p gb-rgbds-emulicious-jar)
-      (user-error "Emulicious jar not found at: %s" gb-rgbds-emulicious-jar))
+      (user-error "Variable `gb-rgbds-emulicious-jar' is not set"))
+    (unless (file-exists-p jar-path)
+      (user-error "Emulicious jar not found at: %s" jar-path))
     (unless (file-exists-p rom-path)
       (user-error "ROM file not found: %s. Build it first!" rom-path))
 
     (message "Starting Emulicious...")
-    (start-process "emulicious" 
-                   "*gb-rgbds-emulicious*" 
-                   "java" "-jar" gb-rgbds-emulicious-jar rom-path)))
+    
+    ;; We use 'call-process' with '0' as the destination.
+    ;; This starts the process asynchronously and DISOWNS it, 
+    ;; so Emacs doesn't wait for it to finish or get stuck.
+    (call-process "java" nil 0 nil 
+                  "-jar" jar-path rom-path)))
 
 ;;;###autoload
 (defun gb-rgbds-build-and-run ()
