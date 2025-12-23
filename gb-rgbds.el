@@ -34,10 +34,9 @@
   :group 'gb-rgbds)
 
 (defcustom gb-rgbds-build-command
-  "rgbasm -L -o main.o %s && rgblink -n main.sym -o %s main.o && rgbfix -v -p 0 %s"
+  "rgbasm -o main.o %s && rgblink -n main.sym -o %s main.o && rgbfix -v -p 0 %s"
   "Command string to build the project. 
-%s placeholders are: source file, output rom, output rom.
-Note: -L and -n main.sym are included to support Emulicious debugging."
+%s placeholders are: source file, output rom, output rom."
   :type 'string
   :group 'gb-rgbds)
 
@@ -108,6 +107,19 @@ Note: -L and -n main.sym are included to support Emulicious debugging."
     
     (add-hook 'compilation-finish-functions finish-hook)
     (gb-rgbds-build)))
+
+;;;###autoload
+(defun gb-rgbds-clean ()
+  "Remove generated build files (.o, .gb, .sym)."
+  (interactive)
+  (let* ((root (gb-rgbds--project-root))
+         (files '("*.o" "*.gb" "*.sym")))
+    (dolist (pattern files)
+      (let ((matched-files (file-expand-wildcards (expand-file-name pattern root))))
+        (dolist (file matched-files)
+          (delete-file file)
+          (message "Deleted: %s" (file-name-nondirectory file))))))
+  (message "Cleanup complete."))
 
 (provide 'gb-rgbds)
 ;;; gb-rgbds.el ends here
