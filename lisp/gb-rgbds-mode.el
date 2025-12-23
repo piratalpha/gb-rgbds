@@ -55,12 +55,16 @@
      . font-lock-constant-face)
     ))
 
+;;;###autoload
 (define-derived-mode gb-rgbds-mode prog-mode "GB-RGBDS"
   "Major mode for Game Boy RGBDS assembly."
   (setq-local font-lock-defaults '(gb-rgbds-font-lock-keywords))
   (setq-local comment-start ";")
   (setq-local comment-end "")
   (setq-local indent-tabs-mode nil))
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.asm\\'" . gb-rgbds-mode))
 
 (define-key gb-rgbds-mode-map (kbd "C-j") #'newline-and-indent)
 (define-key gb-rgbds-mode-map (kbd "RET") #'newline-and-indent)

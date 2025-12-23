@@ -22,9 +22,6 @@
 
 (require 'gb-rgbds-mode)
 
-;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.asm\\'" . gb-rgbds-mode))
-
 ;;; Code:
 
 (defgroup gb-rgbds nil
