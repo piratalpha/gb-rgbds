@@ -38,11 +38,13 @@
   :type 'file
   :group 'gb-rgbds)
 
+;;;###autoload
 (defun gb-rgbds--project-root ()
   "Return the project root containing `gb-rgbds-main-file`."
   (or (locate-dominating-file default-directory gb-rgbds-main-file)
       (error "No %s found in any parent directory" gb-rgbds-main-file)))
 
+;;;###autoload
 (defun gb-rgbds-build ()
   "Build the Game Boy ROM using RGBDS."
   (interactive)
@@ -56,6 +58,7 @@
           (lambda (_) "*gb-rgbds-build*")))
     (compile cmd)))
 
+;;;###autoload
 (defun gb-rgbds-run ()
   "Run the built ROM in Emulicious."
   (interactive)
@@ -70,6 +73,7 @@
      "*gb-rgbds-emulicious*"
      "java" "-jar" gb-rgbds-emulicious-jar rom)))
 
+;;;###autoload
 (defun gb-rgbds-build-and-run ()
   "Build and run the ROM."
   (interactive)
