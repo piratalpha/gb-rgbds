@@ -34,9 +34,10 @@
   :group 'gb-rgbds)
 
 (defcustom gb-rgbds-build-command
-  "rgbasm -o main.o %s && rgblink -o %s main.o && rgbfix -v -p 0 %s"
+  "rgbasm -L -o main.o %s && rgblink -n main.sym -o %s main.o && rgbfix -v -p 0 %s"
   "Command string to build the project. 
-%s placeholders are: source file, output rom, output rom."
+%s placeholders are: source file, output rom, output rom.
+Note: -L and -n main.sym are included to support Emulicious debugging."
   :type 'string
   :group 'gb-rgbds)
 
