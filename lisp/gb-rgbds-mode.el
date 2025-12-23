@@ -58,6 +58,7 @@
 ;;;###autoload
 (define-derived-mode gb-rgbds-mode prog-mode "GB-RGBDS"
   "Major mode for Game Boy RGBDS assembly."
+  (setq-local compile-command (format "rgbasm -o main.o %s && rgblink -o main.gb main.o && rgbfix -v -p 0 main.gb" "main.asm"))
   (setq-local font-lock-defaults '(gb-rgbds-font-lock-keywords))
   (setq-local comment-start ";")
   (setq-local comment-end "")
