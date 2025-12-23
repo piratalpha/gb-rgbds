@@ -82,7 +82,7 @@
     (add-hook 'compilation-finish-functions hook)
     (gb-rgbds-build)))
 
-(when (featurep 'doom)
+(with-eval-after-load 'doom-keybinds
   (map! :leader
         :prefix ("c" . "code")
         :desc "GB build"        "b" #'gb-rgbds-build
