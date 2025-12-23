@@ -82,12 +82,5 @@
     (add-hook 'compilation-finish-functions hook)
     (gb-rgbds-build)))
 
-(with-eval-after-load 'doom-keybinds
-  (map! :leader
-        :prefix ("c" . "code")
-        :desc "GB build"        "b" #'gb-rgbds-build
-        :desc "GB run"          "r" #'gb-rgbds-run
-        :desc "GB build & run"  "R" #'gb-rgbds-build-and-run))
-
 (provide 'gb-rgbds)
 ;;; gb-rgbds.el ends here
