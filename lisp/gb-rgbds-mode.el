@@ -64,9 +64,6 @@
   (setq-local indent-tabs-mode nil))
 
 ;;;###autoload
-(add-to-list 'doom-real-buffer-functions #'gb-rgbds-mode)
-
-;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.asm\\'" . gb-rgbds-mode))
 
 (define-key gb-rgbds-mode-map (kbd "C-j") #'newline-and-indent)
