@@ -26,11 +26,13 @@
 (defcustom gb-rgbds-main-asm-file "main.asm"
   "The entry point assembly file for the project."
   :type 'string
+  :safe #'stringp
   :group 'gb-rgbds)
 
 (defcustom gb-rgbds-output-rom-name "main.gb"
   "The name of the resulting ROM file."
   :type 'string
+  :safe #'stringp
   :group 'gb-rgbds)
 
 (defcustom gb-rgbds-build-command
