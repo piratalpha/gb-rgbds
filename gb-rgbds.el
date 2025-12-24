@@ -29,12 +29,6 @@
   :safe #'stringp
   :group 'gb-rgbds)
 
-(defcustom gb-rgbds-output-rom-name "main.gb"
-  "The name of the resulting ROM file."
-  :type 'string
-  :safe #'stringp
-  :group 'gb-rgbds)
-
 (defcustom gb-rgbds-build-command
   "rgbasm -o %s.o %s && rgblink -n %s.sym -o %s.gb %s.o && rgbfix -v -p 0 %s.gb"
   "Command string to build the project.
@@ -90,13 +84,19 @@ The %s placeholders are: (1) base name, (2) source file, (3) base name,
 (defun gb-rgbds-build-and-run ()
   "Build the project and then run it."
   (interactive)
-  (let ((base (gb-rgbds--get-basename gb-rgbds-main-asm-file)))
-    (add-hook 'compilation-finish-functions
-              (lambda (buf str)
-                (if (null (string-match "abnormally" str))
-                    (gb-rgbds-run)
-                  (message "Build failed; skipping run.")))
-              nil t) ;; 't' makes the hook local to this buffer
+  ;; Define a one-time function to run after compilation
+  (let ((after-compile-fun 
+         (lambda (buf str)
+           (if (null (string-match "abnormally" str))
+               (progn
+                 (gb-rgbds-run)
+                 ;; Remove ourselves so we don't run on every future compile
+                 (remove-hook 'compilation-finish-functions after-compile-fun))
+             (message "Build failed; skipping run.")
+             (remove-hook 'compilation-finish-functions after-compile-fun)))))
+    
+    ;; Add the hook globally, but our lambda handles its own removal
+    (add-hook 'compilation-finish-functions after-compile-fun)
     (gb-rgbds-build)))
 
 ;;;###autoload
