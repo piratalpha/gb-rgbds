@@ -84,19 +84,31 @@ The %s placeholders are: (1) base name, (2) source file, (3) base name,
 (defun gb-rgbds-build-and-run ()
   "Build the project and then run it."
   (interactive)
-  ;; Define a one-time function to run after compilation
-  (let ((after-compile-fun 
-         (lambda (buf str)
-           (if (null (string-match "abnormally" str))
-               (progn
-                 (gb-rgbds-run)
-                 ;; Remove ourselves so we don't run on every future compile
-                 (remove-hook 'compilation-finish-functions after-compile-fun))
-             (message "Build failed; skipping run.")
-             (remove-hook 'compilation-finish-functions after-compile-fun)))))
+  ;; 1. Capture the CURRENT buffer's setting (e.g., "test.asm")
+  ;;    We act as a bridge, carrying this value to the compilation process.
+  (let ((correct-asm-file gb-rgbds-main-asm-file)
+        (hook-fn nil)) ;; Initialize the variable first to avoid the "void" error
     
-    ;; Add the hook globally, but our lambda handles its own removal
-    (add-hook 'compilation-finish-functions after-compile-fun)
+    ;; 2. Define the hook function
+    (setq hook-fn 
+          (lambda (buf str)
+            ;; Check if compilation succeeded
+            (if (null (string-match "abnormally" str))
+                (progn
+                  ;; 3. Temporarily force the variable to be what we captured
+                  ;;    This fixes the "Could not find main.asm" error.
+                  (let ((gb-rgbds-main-asm-file correct-asm-file))
+                    (gb-rgbds-run))
+                  
+                  ;; Clean up the hook so it doesn't run again later
+                  (remove-hook 'compilation-finish-functions hook-fn))
+              
+              ;; If failed, just clean up
+              (message "Build failed; skipping run.")
+              (remove-hook 'compilation-finish-functions hook-fn))))
+
+    ;; Add the hook and start building
+    (add-hook 'compilation-finish-functions hook-fn)
     (gb-rgbds-build)))
 
 ;;;###autoload
