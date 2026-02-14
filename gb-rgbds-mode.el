@@ -80,7 +80,7 @@
   (setq-local indent-tabs-mode nil)) 
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.asm\\'" . gb-rgbds-mode))
+(add-to-list 'auto-mode-alist '("\\.\\(asm\\|inc\\)\\'" . gb-rgbds-mode))
 
 ;; 4. Keybindings
 (define-key gb-rgbds-mode-map (kbd "C-j") #'newline-and-indent)
@@ -90,3 +90,4 @@
 
 (provide 'gb-rgbds-mode)
 ;;; gb-rgbds-mode.el ends here
+ 
